@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Nanostring</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	</head>
+	<body class="is-preload">
+		<div id="wrapper">
+			<h1>Nanostring</h1>
+			<section>
+				<header>
+					<h2>Slice 2</h2>
+					<input id="upload-file-1" type="file"></input>
+					<button id="mask-1" type="button">Mask</button>
+
+					<div>
+						<input type="radio" id="pixel-1" name="method-1" value="pixel" checked>
+						<label for="pixel-1">pixel</label>
+					</div>
+					<div>
+						<input type="radio" id="pixelGraph-1" name="method-1" value="pixelGraph">
+						<label for="pixelGraph-1">pixelGraph</label>
+					</div>
+					<div>
+						<input type="radio" id="Kernel-1" name="method-1" value="kernel">
+						<label for="Kernel-1">Kernel</label>
+					</div>
+
+					<button id="download-1" type="button">Download</button>
+					Threshold:
+					<input type="range" min="0" max="255" value="100" id="threshold-1">
+					Kernel Size:
+					<input type="range" min="1" max="10" value="3" id="kernel-1">
+				</header>
+				<div class="content">
+					<span class="image fill" data-position="center"><canvas id="canvas-1" style="width:500px;"></canvas></span>
+				</div>
+			</section>
+
+			<section>
+				<header>
+					<h2>Slice 3</h2>
+					<input id="upload-file-2" type="file"></input>
+					<button id="mask-2" type="button">Mask</button>
+					<button id="subtract-2" type="button">Subtract</button>
+
+					<div>
+						<input type="radio" id="pixel-1" name="method-2" value="pixel" checked>
+						<label for="pixel-1">pixel</label>
+					</div>
+					<div>
+						<input type="radio" id="pixelGraph-1" name="method-2" value="pixelGraph">
+						<label for="pixelGraph-1">pixelGraph</label>
+					</div>
+					<div>
+						<input type="radio" id="Kernel-1" name="method-2" value="kernel">
+						<label for="Kernel-1">Kernel</label>
+					</div>
+
+					<button id="download-2" type="button">Download</button>
+					Threshold:
+					<input type="range" min="0" max="255" value="100" id="threshold-2">
+					Kernel Size:
+					<input type="range" min="1" max="10" value="3" id="kernel-2">
+				</header>
+				<div class="content">
+					<span class="image fill" data-position="center"><canvas id="canvas-2" style="width:500px;"></canvas></span>
+				</div>
+			</section>
+		</div>
+
+		<!-- Scripts -->
+		<script src="assets/js/mask.js"></script>
+		<script src="assets/js/imgLib1.js"></script>
+		<script src="assets/js/imgLib2.js"></script>
+	</body>
+</html>
