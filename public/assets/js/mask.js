@@ -82,15 +82,12 @@ function pixelGraphMask(img, canvas, threshold, minSize){
             seen[i] = true;
             const [r, g, b, _] = [data[i], data[i+1], data[i+2], data[i+3]];
             const avg = (r + g + b) / 3;
-            if(avg < threshold) continue; // too dark
+            if(avg >= threshold){
+                size++;
+                if(size >= minSize) return true;
+                stack.push(i+4, i-4, i - width*4, i + width*4);
+            }
 
-            size++;
-            if(size >= minSize) return true;
-
-            stack.push(i+4);
-            stack.push(i-4);
-            stack.push(i - width * 4);
-            stack.push(i + width * 4);
         }
 
         return false;
@@ -105,18 +102,14 @@ function pixelGraphMask(img, canvas, threshold, minSize){
             colored[i] = true;
             const [r, g, b, _] = [data[i], data[i+1], data[i+2], data[i+3]];
             const avg = (r + g + b) / 3;
-            if(avg < threshold) continue; // too dark
-
-            // color
-            data[i] = 255;
-            data[i+1] = 0;
-            data[i+2] = 0;
-
-            // recurse
-            stack.push(i+4);
-            stack.push(i-4);
-            stack.push(i - width * 4);
-            stack.push(i + width * 4);
+            if(avg >= threshold){
+                // color
+                data[i] = 255;
+                data[i+1] = 0;
+                data[i+2] = 0;
+                // recurse
+                stack.push(i+4, i-4, i - width*4, i + width*4);
+            }
         }
     }
 
@@ -149,7 +142,6 @@ function kernelmask(img, canvas, threshold, radius){
         data[i+1] = 0;
         data[i+2] = 0;
     });
-
 
     ctx.putImageData(imageData, 0, 0);
     console.log(`kernelmask complete in ${Date.now() - start}ms`);
