@@ -1,3 +1,4 @@
+// Mask (by setting RGB = 255,0,0) every pixel in the img/canvas that (r+g+b)/3 > threshold.
 function pixelMask(img, canvas, threshold){
     console.log(`pixelMask::threshold(${threshold})`);
     const ctx = canvas.getContext("2d");
@@ -20,6 +21,8 @@ function pixelMask(img, canvas, threshold){
     console.log(`pixelMask complete in ${Date.now() - start}ms`);
 }
 
+// DoubleMask (by setting RGB = 0,255,0) every pixel in the writeCanvas who's corresponding pixel in the readCanvas has
+// RGB = 255,0,0, in effect deleniating pixels to be 'subtracted' from the writeCanvas mask in a subsequent step.
 function subtractMask(readCanvas, writeCanvas, writeImg){
     console.log(`subtraction`);
     const start = Date.now();
@@ -55,6 +58,8 @@ function subtractMask(readCanvas, writeCanvas, writeImg){
     console.log(`subtraction complete in ${Date.now() - start}ms`);
 }
 
+// Mask (by setting RGB = 255,0,0) every pixel in the img/canvas that (r+g+b)/3 > threshold and that is part of a
+// contiguous set of at least minSize pixels. Contiguous means vertically or horizontally (but not diagonally) adjacent.
 function pixelGraphMask(img, canvas, threshold, minSize){
     console.log(`pixelGraphMask::threshold(${threshold})::minSize(${minSize})`);
     const start = Date.now();
@@ -122,6 +127,8 @@ function pixelGraphMask(img, canvas, threshold, minSize){
     console.log(`pixelGraphMask complete in ${Date.now() - start}ms`);
 }
 
+// Mask (by setting RGB = 255,0,0) every pixel in the img/canvas for which the surrounding `radius` pixels above, below,
+// left and right have a mean brightness [(r+g+b)/3] > threshold.
 function kernelmask(img, canvas, threshold, radius){
     console.log(`kernelMask::threshold(${threshold})::radius(${radius})`);
     const start = Date.now();
@@ -148,7 +155,7 @@ function kernelmask(img, canvas, threshold, radius){
     console.log(`kernelmask complete in ${Date.now() - start}ms`);
 }
 
-
+// Returns the mean brightness for a kernel originating at i and radiating `radius` pixels out (up, down, left, right).
 function avgKernel(canvas, data, i, radius){
     const width = canvas.width;
 
