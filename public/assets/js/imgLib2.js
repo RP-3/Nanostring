@@ -7,17 +7,15 @@ window.addEventListener("load", function() {
     let fileName = "";
     // upload File
     uploadFile.addEventListener("change", () => {
-        const ctx = canvas.getContext("2d");
         const file = document.getElementById("upload-file-2").files[0];
-        // init FileReader API
+
         const reader = new FileReader();
-        if (file) {
-            fileName = file.name;
-            // read data as URL
-            reader.readAsDataURL(file);
-        }
+        if(!file) return alert("No file found");
+        fileName = file.name;
+        reader.readAsDataURL(file);
 
         // add image to canvas
+        const ctx = canvas.getContext("2d");
         reader.addEventListener("load", () => {
             img = new Image();
             img.src = reader.result;
@@ -31,16 +29,10 @@ window.addEventListener("load", function() {
 
     const downloadBtn = document.getElementById("download-2");
     downloadBtn.addEventListener("click", () => {
-        const fileExtension = fileName.slice(-4);
-        let newFilename;
-
-        if (fileExtension === ".jpg" || fileExtension === ".png") {
-            newFilename = fileName.substring(0, fileName.length - 4) + "-ukraine.jpg";
-        }
-
+        let newFilename = fileName.substring(0, fileName.length - 4) + "_masked.png";
         const link = document.createElement("a");
         link.download = newFilename;
-        link.href = canvas.toDataURL("image/jpeg", 0.8);
+        link.href = canvas.toDataURL("image/png", 1);
         link.dispatchEvent(new MouseEvent("click"));
     });
 
