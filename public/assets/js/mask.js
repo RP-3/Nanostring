@@ -6,7 +6,7 @@ function pixelMask(img, canvas, threshold){
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
 
-    for (var i = 0; i < data.length; i += 4) {
+    for (let i = 0; i < data.length; i += 4) {
         const [r, g, b, _] = [data[i], data[i+1], data[i+2], data[i+3]];
         const avg = (r + g + b) / 3;
 
@@ -28,7 +28,7 @@ function subtractMask(readCanvas, writeCanvas, writeImg){
     const writeData = writeImgData.data;
 
     const wasRed = new Set();
-    for (var i = 0; i < writeData.length; i += 4) {
+    for (let i = 0; i < writeData.length; i += 4) {
         const r = writeData[i];
         if(r === 255) wasRed.add(i);
     }
@@ -39,7 +39,7 @@ function subtractMask(readCanvas, writeCanvas, writeImg){
     const readImgData = readCtx.getImageData(0, 0, readCanvas.width, readCanvas.height);
     const readData = readImgData.data;
 
-    for (var i = 0; i < readData.length; i += 4) {
+    for (let i = 0; i < readData.length; i += 4) {
         const [r, g, b, _] = [readData[i], readData[i+1], readData[i+2], readData[i+3]];
         if(r === 255 && g === 0 && b === 0){ // red pixel in second slice
             writeData[i] = 0;
@@ -115,7 +115,7 @@ function pixelGraphMask(img, canvas, threshold, minSize){
         }
     }
 
-    for (var i = 0; i < data.length; i += 4) {
+    for (let i = 0; i < data.length; i += 4) {
         if(bigEnough(i)) paintIsland(i);
     }
     ctx.putImageData(imageData, 0, 0);
@@ -130,15 +130,20 @@ function kernelmask(img, canvas, threshold, radius){
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
 
-    for (var i = 0; i < data.length; i += 4) {
-        const kernelBrightness = avgKernel(canvas, data, i, radius);
-
-        if(kernelBrightness > threshold){
-            data[i] = 255;
-            data[i+1] = 0;
-            data[i+2] = 0;
+    const targetCells = [];
+    for (let i = 0; i < data.length; i += 4) {
+        if(avgKernel(canvas, data, i, radius) > threshold){
+            targetCells.push(i);
         }
     }
+
+    targetCells.forEach((i) => {
+        data[i] = 255;
+        data[i+1] = 0;
+        data[i+2] = 0;
+    });
+
+
     ctx.putImageData(imageData, 0, 0);
     console.log(`kernelmask complete in ${Date.now() - start}ms`);
 }
