@@ -21,6 +21,46 @@ function pixelMask(img, canvas, threshold){
     console.log(`pixelMask complete in ${Date.now() - start}ms`);
 }
 
+// Converts the PNG to a strictly two-colour image using the following rules:
+// 1. If a pixel is green (0,255,0), it is converted to black, else
+// 2. If a pixel is red (255,0,0), it is converted to white, else
+// 3. It is converted to black,
+// where black is (0,0,0) and white is (255,255,255).
+// If that sounds overcomplicated, it is. We're basically converting red things to white, and everything else to black,
+// but I wanted to formally spell out the rules.
+function finaliseMask(img, canvas){
+    console.log(`finalisation`);
+    const start = Date.now();
+    const ctx = canvas.getContext("2d");
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+
+    // save the pixels that will eventually be white
+    const whitePixels = [];
+    for (let i = 0; i < data.length; i += 4) {
+        const [r, g, b, _] = [data[i], data[i+1], data[i+2], data[i+3]];
+        if(r === 255 && b === 0 && g === 0) whitePixels.push(i);
+    }
+
+    // make everything else black
+    ctx.drawImage(img, 0, 0);
+    for (let i = 0; i < data.length; i += 4) {
+        data[i] = 0;
+        data[i+1] = 0;
+        data[i+2] = 0;
+    }
+
+    // paint the white ones white.
+    whitePixels.forEach((i) => {
+        data[i] = 255;
+        data[i+1] = 255;
+        data[i+2] = 255;
+    })
+
+    ctx.putImageData(imageData, 0, 0);
+    console.log(`finalisation complete in ${Date.now() - start}ms`);
+}
+
 // DoubleMask (by setting RGB = 0,255,0) every pixel in the writeCanvas who's corresponding pixel in the readCanvas has
 // RGB = 255,0,0, in effect deleniating pixels to be 'subtracted' from the writeCanvas mask in a subsequent step.
 function subtractMask(readCanvas, writeCanvas, writeImg){

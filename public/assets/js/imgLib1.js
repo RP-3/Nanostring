@@ -36,6 +36,9 @@ window.addEventListener("load", function() {
         link.dispatchEvent(new MouseEvent("click"));
     });
 
+    const finaliseBtn = document.getElementById("finalise-1");
+    finaliseBtn.addEventListener("click", () => finaliseMask(img, canvas));
+
     const thresholdSlider = document.getElementById("threshold-1");
     thresholdSlider.addEventListener(('change'), (e) => {
         threshold = parseInt(e.target.value);
