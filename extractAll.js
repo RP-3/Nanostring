@@ -8,15 +8,19 @@ importClass(Packages.ij.IJ);
 importClass(Packages.ij.plugin.frame.RoiManager);
 importClass(Packages.ij.gui.GenericDialog);
 
-var input = "/Users/tubby/code/nanostring/public/workingDirectory/input/";
-var output = "/Users/tubby/code/nanostring/public/workingDirectory/output/";
+var args = getArgument().split(','); // args arrive as a single string
+var inputFilePath = args[0];
+var outputPath = args[1];
 
-imp = IJ.openImage(input + "001.tiff");
+imp = IJ.openImage(inputFilePath);
+
+var inputFileName = inputFilePath.split('/').pop().replace('tiff', '');
+
 IJ.run(imp, "8-bit", "");
 imp.show();
 imp.setSlice(2);
-IJ.saveAs(imp, "PNG", output + "001_2.png");
+IJ.saveAs(imp, "PNG", outputPath+inputFileName+'_2.png');
 IJ.setSlice(3);
-IJ.saveAs(imp, "PNG", output + "001_3.png");
+IJ.saveAs(imp, "PNG", outputPath+inputFileName+'_3.png');
 imp.close();
 IJ.run("Quit");
